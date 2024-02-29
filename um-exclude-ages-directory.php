@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Ultimate Member - Exclude ages from Members Directory
  * Description:     Extension to Ultimate Member for setting an age limit for display of users in the Members Directory.
- * Version:         1.0.0
+ * Version:         1.1.0
  * Requires PHP:    7.4
  * Author:          Miss Veronica
  * License:         GPL v2 or later
@@ -10,7 +10,7 @@
  * Author URI:      https://github.com/MissVeronica
  * Text Domain:     ultimate-member
  * Domain Path:     /languages
- * UM version:      2.7.0
+ * UM version:      2.8.3
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit; 
@@ -41,9 +41,9 @@ Class UM_Exclude_Ages_Directory {
                 if ( ! empty( $age ) && is_numeric( $age )) {
 
                     $age_limit = current_time( 'timestamp' ) - (int)$age * YEAR_IN_SECONDS;
-                    $age_limit_date = date_i18n( 'Y/m/d', mktime( 0,0,0, 
-                                                                date_i18n( 'm', current_time( 'timestamp' ) ), 
-                                                                date_i18n( 'd', current_time( 'timestamp' ) ), 
+                    $age_limit_date = date_i18n( 'Y/m/d', mktime( 0,0,0,
+                                                                date_i18n( 'm', current_time( 'timestamp' ) ),
+                                                                date_i18n( 'd', current_time( 'timestamp' ) ),
                                                                 date_i18n( 'Y', $age_limit )) );
 
                     $sql = "SELECT user_id FROM {$wpdb->usermeta} WHERE meta_key = '{$this->birth_date}' AND ( meta_value <= '%s' AND meta_value != '' AND meta_value IS NOT NULL )";
@@ -80,22 +80,25 @@ Class UM_Exclude_Ages_Directory {
             $um_forms[$um_form->ID] = $um_form->post_title;
         }
 
-        $settings_structure['']['sections']['users']['fields'][] = array(
+        $settings_structure['']['sections']['users']['form_sections']['exclude_ages']['title']       = __( 'Exclude Ages', 'ultimate-member' );
+        $settings_structure['']['sections']['users']['form_sections']['exclude_ages']['description'] = __( 'Plugin version 1.1.0 - tested with UM 2.8.3', 'ultimate-member' );
+
+        $settings_structure['']['sections']['users']['form_sections']['exclude_ages']['fields'][] = array(
             'id'            => 'um_exclude_ages_forms',
             'type'          => 'select',
             'multi'         => true,
             'size'          => 'medium',
             'options'       => $um_forms,
-            'label'         => __( 'Exclude Ages - Members Directory Forms', 'ultimate-member' ),
-            'tooltip'       => __( 'Select single or multiple Members Directory Forms for the age limit.', 'ultimate-member' ),
+            'label'         => __( 'Members Directory Forms', 'ultimate-member' ),
+            'description'   => __( 'Select single or multiple Members Directory Forms for the age limit.', 'ultimate-member' ),
             );
 
-        $settings_structure['']['sections']['users']['fields'][] = array(
+        $settings_structure['']['sections']['users']['form_sections']['exclude_ages']['fields'][] = array(
             'id'            => 'um_exclude_ages_limit',
             'type'          => 'text',
             'size'          => 'small',
-            'label'         => __( 'Exclude Ages - Age Limit', 'ultimate-member' ),
-            'tooltip'       => __( 'Enter the age limit number.', 'ultimate-member' ),
+            'label'         => __( 'Age Limit', 'ultimate-member' ),
+            'description'   => __( 'Enter the age limit number.', 'ultimate-member' ),
             );
 
         return $settings_structure;
